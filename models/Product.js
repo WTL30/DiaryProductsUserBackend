@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  name: {
+  productName: {
     type: String,
     required: true,
     trim: true,
   },
-  description: {
+  productDescription: {
+    type: String,
+    required: true,
+  },
+  nutritionalInfo: {
     type: String,
     required: true,
   },
@@ -15,10 +19,20 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  oldPrice: {
+  quantity: {
     type: Number,
     default: null,
     min: 0,
+  },
+  unit: {
+    type: [String],
+    required: true,
+    validate: {
+      validator: function(v) {
+        return Array.isArray(v) && v.length > 0 && v.every(cat => typeof cat === 'string');
+      },
+      message: 'Categories must be a non-empty array of strings',
+    },
   },
   category: {
     type: [String],
@@ -55,26 +69,8 @@ const productSchema = new mongoose.Schema({
       message: 'At least one image is required',
     },
   },
-  availableSizes: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: function(v) {
-        return Array.isArray(v) && v.length > 0 && v.every(size => typeof size === 'string');
-      },
-      message: 'Sizes must be a non-empty array of strings',
-    },
-  },
-  availableColors: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: function(v) {
-        return Array.isArray(v) && v.length > 0 && v.every(color => typeof color === 'string');
-      },
-      message: 'Colors must be a non-empty array of strings',
-    },
-  },
+  
+ 
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

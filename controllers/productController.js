@@ -45,16 +45,16 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const {
-      name,
-      description,
+      productName,
+      productDescription,
+      nutritionalInfo,
       price,
-      oldPrice,
+      availableStock,
+      unit,
+      quantity,
       category,
       subcategory,
-      availableStock,
-      images,
-      availableSizes,
-      availableColors,
+      images
     } = req.body;
 
     // Convert category and subcategory to arrays if they are strings
@@ -74,16 +74,16 @@ const createProduct = async (req, res) => {
     }
 
     const product = await Product.create({
-      name,
-      description,
-      price,
-      oldPrice,
-      category: processedCategory,
-      subcategory: processedSubcategory,
-      availableStock,
-      images: Array.isArray(images) ? images : [images],
-      availableSizes,
-      availableColors,
+      productName,
+            productDescription,
+            nutritionalInfo,
+            price,
+            availableStock,
+            unit,
+            quantity,
+            category,
+            subcategory,
+            images
     });
 
     res.status(201).json({
