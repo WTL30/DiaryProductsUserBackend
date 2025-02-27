@@ -262,4 +262,15 @@ const updateUserProfileDetail = async (req, res) => {
     }
   };
 
-  module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, changePassword, resetPassword, forgotPassword, getUserProfileDetail, updateUserProfileDetail };
+
+  const getAllUsersDetails = async (req, res) => {
+    try {
+      const users = await User.find({}, "name email");  // Select only name & email
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+  
+
+  module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile, changePassword, resetPassword, forgotPassword, getUserProfileDetail, updateUserProfileDetail,getAllUsersDetails };

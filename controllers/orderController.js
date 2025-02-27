@@ -457,6 +457,39 @@ const updateReturnStatus = async (req, res) => {
   }
 };
 
+const updateItemStatus = async (req, res) => {
+  try {
+    const { productId } = req.params; // This should actually be the `items._id`
+    const { action } = req.body;
+    const status = action === "block" ? "block" : "active";
+
+    console.log(`Received productId: ${productId}, Action: ${action}`);
+
+    // Convert productId (which is actually item._id) to ObjectId
+    const itemObjectId = new mongoose.Types.ObjectId(productId);
+
+    // ✅ Fix: Update using `items._id`, not `items.productId`
+    const updatedOrder = await Order.findOneAndUpdate(
+      { "items._id": itemObjectId },  // ✅ Correct field for search
+      { $set: { "items.$.status": status } }, 
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      console.log("Item not found in any order.");
+      return res.status(404).json({ success: false, message: "Item not found in any order" });
+    }
+
+    console.log("Updated Order:", updatedOrder);
+    res.json({ success: true, message: "Item status updated successfully", order: updatedOrder });
+  } catch (error) {
+    console.error("Error updating item status:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+
 module.exports = {
   createOrder,
   getOrderById,
@@ -473,4 +506,5 @@ module.exports = {
   saveReturnReason,
   getReturnOrder,
   updateReturnStatus,
+  updateItemStatus
 };

@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require("dotenv").config();
 var connectDB = require("./config/db"); // ✅ Import connectDB
+var cors = require('cors'); // ✅ Import CORS
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,12 +26,21 @@ const updatePaymentStatus = require("./routes/orderRoutes")
 const updateOrderStatus = require("./routes/orderRoutes")
 
 const uploadRoutes = require("./controllers/routeUpload")
+const manageAdmin = require("./routes/adminManagerRoutes")
 
+const stockRoutes = require("./routes/stockRoutes")
 
 var app = express();
 
 // ✅ Connect to Database
 connectDB();
+
+
+// ✅ Enable CORS for Frontend (localhost:3000)
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true // Allow cookies & headers if needed
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,6 +72,8 @@ app.use("/api/updatePayment", updatePaymentStatus)
 
 app.use('/api/userProfileDetail', userRoutes)
 app.use('/api/updateUserProfileDetail', userRoutes)
+app.use('./api/admin-manage',manageAdmin)
+app.use("/api/stocks", stockRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -84,4 +96,14 @@ app.listen(PORT, () => {
 })
 
 module.exports = app;
+
+
+
+
+
+
+
+
+
+
 

@@ -138,6 +138,9 @@ const clearCart = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = {
   addItemToCart,
   getUserCart,

@@ -11,6 +11,7 @@ const {
   changePassword,
   getUserProfileDetail,
   updateUserProfileDetail,
+  getAllUsersDetails
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -35,5 +36,8 @@ router.post("/:id/:token", changePassword);
 router.get("/user-profile", protect, getUserProfileDetail);
 // update user profile details
 router.put("/update-user-profile", protect, updateUserProfileDetail);
+
+
+router.get("/getAllUser", getAllUsersDetails);
 
 module.exports = router;
